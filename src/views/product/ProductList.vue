@@ -1,6 +1,18 @@
 <template>
     <div>
-
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form-item label="商品名称">
+                <el-input v-model="formInline.user" placeholder="商品名称"></el-input>
+            </el-form-item>
+            <el-form-item label="商品类目">
+                <el-select v-model="category" placeholder="商品类目">
+                    <el-option v-for="item in cates" :key="item.id" :label="item.categoryName" :value="item.categoryName"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="onSubmit">查询</el-button>
+            </el-form-item>
+        </el-form>
     <el-table
 
             :data="tableData"
@@ -94,28 +106,52 @@
             }
         ,  page(currentPage){
                 // console.log(currentPage)
+
                 const  _this = this
-                axios.get("http://192.168.1.200:9090/pro/getProductList/"+currentPage+"/5").then(function (resp) {
+                axios.get("http://192.168.1.155:9090/pro/getProductList/"+currentPage+"/5").then(function (resp) {
                     // console.log(resp)
                     _this.tableData = resp.data.records
                     _this.total = resp.data.total
+                })
+            },
+            getCategoryList(){
+                const  _this = this
+                axios.get("http://192.168.1.155:9090/proCate/getProCateList").then(function (resp) {
+
+                    console.log(resp)
+                    console.log(resp.data)
+                    if(resp.status===200){
+                    _this.cates =resp.data
+
+                    }
                 })
             }
         },
         created(){
             const  _this = this
-            axios.get("http://192.168.1.200:9090/pro/getProductList/1/5").then(function (resp) {
+            axios.get("http://192.168.1.155:9090/pro/getProductList/1/5").then(function (resp) {
 
                 _this.tableData = resp.data.records
                 _this.pageSize = resp.data.size
                 _this.total = resp.data.total
             })
+
+
+        },
+        mounted() {
+            this.getCategoryList()
         },
         data() {
             return {
                 total:null,
                 tableData: null,
-                pageSize:'1'
+                pageSize:'1',
+                formInline: {
+                    user: '',
+                    region: ''
+                },
+                category:'',
+                cates:[]
             }
         }
     }

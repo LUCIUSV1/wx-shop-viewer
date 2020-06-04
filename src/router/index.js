@@ -76,14 +76,14 @@ Vue.use(VueRouter)
     },
     {
 
-      path: '/1',
+      path: '/',
       name: '',
 
       redirect:"/login",
-      component: Logout,
+      component: Login,
       children :[
         {
-          path: '/Logout',
+          path: '/login',
           name: '退出登录',
           component: Logout
         }

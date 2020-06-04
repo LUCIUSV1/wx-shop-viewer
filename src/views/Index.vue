@@ -19,7 +19,7 @@
         <el-container>
             <el-header style="text-align: right; font-size: 12px">
 
-                <span>驴子</span>
+                <span>{{username}}</span>
             </el-header>
 
             <el-main>
@@ -33,7 +33,12 @@
 
 <script>
     export default {
-        name: "Index"
+        name: "Index",
+        data(){
+            return {
+                username : sessionStorage.getItem("user")
+            }
+        }
     }
 </script>
 
