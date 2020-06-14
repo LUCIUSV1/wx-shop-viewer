@@ -108,7 +108,16 @@
                 // console.log(currentPage)
 
                 const  _this = this
-                axios.get("http://192.168.1.155:9090/pro/getProductList/"+currentPage+"/5").then(function (resp) {
+                axios.get("http://192.168.0.103:9090/pro/getProductList/"+currentPage+"/5").then(function (resp) {
+                    // console.log(resp)
+                    _this.tableData = resp.data.records
+                    _this.total = resp.data.total
+                })
+            },
+            onSubmit(){
+                const  _this = this
+                axios.get("http://192.168.0.103:9090/pro/getProductListByCheck/"+this.formInline.user+"/"
+                    +this.category+"/"+1+"/5").then(function (resp) {
                     // console.log(resp)
                     _this.tableData = resp.data.records
                     _this.total = resp.data.total
@@ -116,10 +125,10 @@
             },
             getCategoryList(){
                 const  _this = this
-                axios.get("http://192.168.1.155:9090/proCate/getProCateList").then(function (resp) {
+                axios.get("http://192.168.0.103:9090/proCate/getProCateList").then(function (resp) {
 
-                    console.log(resp)
-                    console.log(resp.data)
+                    // console.log(resp)
+                    // console.log(resp.data)
                     if(resp.status===200){
                     _this.cates =resp.data
 
@@ -129,7 +138,8 @@
         },
         created(){
             const  _this = this
-            axios.get("http://192.168.1.155:9090/pro/getProductList/1/5").then(function (resp) {
+            // console.log(this.formInline.user)
+            axios.get("http://192.168.0.103:9090/pro/getProductList/1/5").then(function (resp) {
 
                 _this.tableData = resp.data.records
                 _this.pageSize = resp.data.size

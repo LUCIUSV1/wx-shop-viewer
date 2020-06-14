@@ -34,7 +34,7 @@
             login() {
                 const  _this= this
                 axios
-                    .post('http://192.168.1.155:9090/user/login?userName='+this.loginForm.username+"&password="+this.loginForm.password).then(function (resp) {
+                    .post('http://192.168.0.103:9090/user/login?userName='+this.loginForm.username+"&password="+this.loginForm.password).then(function (resp) {
 
                     if(resp.data.code==='200'){
                         _this.$router.push('/')
