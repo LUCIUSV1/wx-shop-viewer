@@ -1,32 +1,46 @@
 <template>
-    <!--  构建整个页面布局    -->
-    <el-container style=" border: 1px solid #eee">
-        <!--构建左侧菜单-->
-        <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-            <h2 style="text-align: center">后台管理</h2>
-            <!--        左侧菜单-->
-            <el-menu router :default-openeds="['1']">
-                <el-submenu v-for="(item,index) in $router.options.routes" :index="index+''">
-                    <template slot="title">{{item.name}}</template>
-                    <el-menu-item v-for="(item2,index2)  in item.children" :index="item2.path" :class="$route.path==item2.path ? 'is-active' :''">
-                        {{item2.name}}
+<el-container>
+    <el-header class="el-header">
+        <div class="header-div">
+            <img src="../assets/icon2.png" alt="">
+            <span>后台管理系统</span>
+        </div>
+        <el-button class="logoutBtn" type="info" @click="logout">退出</el-button>
+    </el-header>
+    <el-container>
+        <el-aside style="width: 200px">
+
+            <el-menu
+                    class="el-menu-vertical-demo"
+                    background-color="#333744"
+                    text-color="#fff"
+                    :unique-opened="true "
+                    active-text-color="#409EFF"
+
+                    :collapse-transition="false"
+
+                    :router="true">
+                <el-submenu v-for="item in menu_info" :index="item.authName+' '" :key="item.id">
+                    <template slot="title">
+                        <i></i>
+                        <span>{{item.authName}}</span>
+                    </template>
+                    <el-menu-item :index="'/'+subItem.path" v-for="subItem in item.children"
+                                  :key="subItem.id"
+                    >
+                        <span>{{subItem.authName}}</span>
                     </el-menu-item>
                 </el-submenu>
             </el-menu>
-
         </el-aside>
-
         <el-container>
-            <el-header style="text-align: right; font-size: 12px">
-
-                <span>{{username}}</span>
-            </el-header>
-
             <el-main>
                 <router-view></router-view>
             </el-main>
+            <el-footer>@2020</el-footer>
         </el-container>
     </el-container>
+</el-container>
 
 
 </template>
@@ -36,12 +50,109 @@
         name: "Index",
         data(){
             return {
-                username : sessionStorage.getItem("user")
+                    menu_info:[
+                        {
+                            id: 101,
+                            authName: "订单管理",
+                            path: null,
+                            children: [
+                                {
+                                    id: 1011,
+                                    authName: "订单列表",
+                                    path: '/orderList',
+                                }
+                            ]
+                        },
+                        {
+                            id: 102,
+                            authName: "商品管理",
+                            path: null,
+                            children: [
+                                {
+                                    id: 1021,
+                                    authName: "商品列表",
+                                    path: 'productList',
+
+                                },
+                                {
+                                    id: 1022,
+                                    authName: "类目列表",
+                                    path: 'proCateList',
+
+                                },
+                                {
+                                    id: 1023,
+                                    authName: "批量导入",
+                                    path: 'proCateImp',
+
+                                }
+                            ]
+                        }
+                    ]
             }
+        },
+        methods:{
+            logout(){
+                window.sessionStorage.clear()
+                this.$message.info('退出成功')
+                this.$router.push('/login')
+            }
+        }
+        ,created() {
         }
     }
 </script>
 
 <style scoped>
+img{
+    width: 50px;
+    height: 50px;
+}
+.el-footer {
+    background-color: #373d41;
+    color: #ffffff;
+    text-align: center;
+    line-height: 60px;
+}
+.el-header{
+    background-color: #373d41;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 0px;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+}
+.el-container{
+    height: 100%;
+}
+.el-aside {
 
+    color: #333;
+    text-align: center;
+    line-height: 200px;
+
+}
+.el-menu-vertical-demo{
+    height: 100%;
+}
+.el-main {
+    background-color: #E9EEF3;
+    color: #333;
+    text-align: center;
+    line-height: 160px;
+}
+
+body > .el-container {
+    margin-bottom: 40px;
+}
+
+.el-container:nth-child(5) .el-aside,
+.el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+}
+
+.el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+}
 </style>

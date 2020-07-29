@@ -77,8 +77,8 @@
                 label="操作"
                 width="100">
             <template slot-scope="scope">
-                <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
-                <el-button type="text" size="small">删除</el-button>
+                <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                <el-button type="text" size="small">编辑</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -108,7 +108,7 @@
                 // console.log(currentPage)
 
                 const  _this = this
-                axios.get("http://192.168.2.102:9090/pro/getProductList/"+currentPage+"/5").then(function (resp) {
+                axios.get("http://192.168.1.155:9090/pro/getProductList/"+currentPage+"/5").then(function (resp) {
                     // console.log(resp)
                     _this.tableData = resp.data.records
                     _this.total = resp.data.total
@@ -116,14 +116,8 @@
             },
             onSubmit(){
                 const  _this = this
-                axios.get("http://192.168.2.102:9090/pro/getProductListByCheck",{
-                    params:{
-                        productName : this.formInline.user,
-                        categoryType: this.category,
-                        page:1,
-                        size:5
-                    }
-                }).then(function (resp) {
+                axios.get("http://192.168.1.155:9090/pro/getProductListByCheck/"+this.formInline.user+"/"
+                    +this.category+"/"+1+"/5").then(function (resp) {
                     // console.log(resp)
                     _this.tableData = resp.data.records
                     _this.total = resp.data.total
@@ -131,7 +125,7 @@
             },
             getCategoryList(){
                 const  _this = this
-                axios.get("http://192.168.2.102:9090/proCate/getProCateList").then(function (resp) {
+                axios.get("http://192.168.1.155:9090/proCate/getProCateList").then(function (resp) {
 
                     // console.log(resp)
                     // console.log(resp.data)
@@ -145,7 +139,7 @@
         created(){
             const  _this = this
             // console.log(this.formInline.user)
-            axios.get("http://192.168.2.102:9090/pro/getProductList/1/5").then(function (resp) {
+            axios.get("http://192.168.1.155:9090/pro/getProductList/1/5").then(function (resp) {
 
                 _this.tableData = resp.data.records
                 _this.pageSize = resp.data.size

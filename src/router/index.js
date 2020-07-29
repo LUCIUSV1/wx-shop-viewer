@@ -1,18 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Logout from '../views/Logout.vue'
 import Index from '../views/Index.vue'
-import About from '../views/About.vue'
+
 import categoryList from '../views/category/CategoryList.vue'
 import categoryImport from '../views/category/CategoryImport.vue'
 import orderList from '../views/order/OrderList'
 import AllOrder from '../views/order/AllOrder'
 import productList from '../views/product/ProductList'
 import productImport from '../views/product/ProductImport'
-import fa from "element-ui/src/locale/lang/fa";
-
+import product from '../views/product/Product'
 
 Vue.use(VueRouter)
 
@@ -23,7 +21,7 @@ Vue.use(VueRouter)
       path: '/',
       name: '订单管理',
       component: Index,
-      redirect:"/orderList",
+      redirect:"/login",
       children :[
         {
           path: '/orderList',
@@ -52,6 +50,11 @@ Vue.use(VueRouter)
           path: '/productImport',
           name: '批量导入',
           component: productImport
+        },
+        {
+          path: '/product',
+          name: '测试',
+          component: product
         }
       ]
     },
@@ -66,11 +69,6 @@ Vue.use(VueRouter)
           path: '/categoryList',
           name: '类目列表',
           component: categoryList
-        },
-        {
-          path: '/categoryImport',
-          name: '批量导入',
-          component: categoryImport
         }
       ]
     },

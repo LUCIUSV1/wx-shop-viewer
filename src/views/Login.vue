@@ -1,12 +1,14 @@
 <template>
     <body id="poster">
-    <el-form class="login-container" label-position="left" label-width="0px">
+    <el-form
+            class="login-container"
+            ref="loginFormRef" :model="loginForm" :rules="rules"
+           label-position="left" label-width="0px">
         <h3 class="login_title">系统登录</h3>
-        <el-form-item>
-            <el-input type="text" v-model="loginForm.username" auto-complete="off" placeholder="账号"></el-input>
+        <el-form-item prop="userName">
+            <el-input type="text" v-model="loginForm.userName" auto-complete="off" placeholder="用户名"></el-input>
         </el-form-item>
-
-        <el-form-item>
+        <el-form-item prop="password">
             <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
         </el-form-item>
 
@@ -24,38 +26,64 @@
         data() {
             return {
                 loginForm: {
-                    username: '',
-                    password: ''
+                    userName: 'admin',
+                    password: '123456'
                 },
-                responseResult: []
+                responseResult: [],
+                rules:{
+                    userName : [
+                        {type: "string",required :true,message:"请输入用户名",trigger:"blur"},
+                        {min:3,max:10,message: "用户名长度在3-10个字符之间",trigger:"blur"}
+                    ],
+                    password :[
+                        {required :true,message:"请输入密码",trigger:"blur"},
+                        {min:6,max:15,message: "密码长度在6-15个字符之间",trigger:"blur"}
+                    ]
+                }
             }
         },
         methods: {
             login() {
-                const  _this= this
-                axios
-                    .post('http://192.168.2.101:9090/user/login?userName='+this.loginForm.username+"&password="+this.loginForm.password).then(function (resp) {
-
-                    if(resp.data.code==='200'){
-                        _this.$router.push('/')
-                    }else{
-                        const h = _this.$createElement;
-
-                        _this.$notify({
+                this.$refs.loginFormRef.validate(async  valid=>{
+                    if(!valid) return;
+                    const {data:res} = await this.$http.post(`/user/login/${this.loginForm.userName}/${this.loginForm.password}`)
+                    console.log(res)
+                    if(res.code===401){
+                        const h = this.$createElement;
+                        return this.$notify({
                             title: '登录异常',
-                            message: h('i', { style: 'color: teal'}, '登录失败，请稍后再试！')
-                        });
+                            message: h('i', { style: 'color: teal'}, res.msg)
+                        })
+                    }else if(res.code===500){
+                        const h = this.$createElement;
+                        return this.$notify({
+                            title: '登录异常',
+                            message: h('i', { style: 'color: teal'}, res.msg)
+                        })
+                    }else {
+                        this.$message.success(res.msg)
+                        window.sessionStorage.setItem('token',res.object.token)
+                        await this.$router.push('/orderList')
                     }
                 })
 
-            },
-            open1() {
-                const h = this.$createElement;
+                // const  _this= this
+                // axios
+                //     .post('http://192.168.0.110:9091/user/login?userName='+this.loginForm.username+"&password="+this.loginForm.password).then(function (resp) {
+                //     // .get('http://192.168.1.182:8087/Login.html?userName=user&password=123456').then(function (resp) {
+                //
+                //     if(resp.data.code==='200'){
+                //         _this.$router.push('/orderList ')
+                //     }else{
+                //         const h = _this.$createElement;
+                //
+                //         _this.$notify({
+                //             title: '登录异常',
+                //             message: h('i', { style: 'color: teal'}, '登录失败，请稍后再试！')
+                //         });
+                //     }
+                // })
 
-                this.$notify({
-                    title: '标题名称',
-                    message: h('i', { style: 'color: teal'}, '这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案')
-                });
             }
         }
     }
